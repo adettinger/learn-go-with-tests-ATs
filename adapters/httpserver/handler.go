@@ -4,10 +4,24 @@ import (
 	"fmt"
 	"net/http"
 
-	go_specs_greet "github.com/adettinger/learn-go-with-tests-ATs/domain/interactions"
+	"github.com/adettinger/learn-go-with-tests-ATs/domain/interactions"
 )
 
-func Handler(w http.ResponseWriter, r *http.Request) {
-	name := r.URL.Query().Get("name")
-	fmt.Fprint(w, go_specs_greet.Greet(name))
+const (
+	greetPath = "/greet"
+	cursePath = "/curse"
+)
+
+func NewHandler() http.Handler {
+	mux := http.NewServeMux()
+	mux.HandleFunc(greetPath, replyWith(interactions.Greet))
+	mux.HandleFunc(cursePath, replyWith(interactions.Curse))
+	return mux
+}
+
+func replyWith(f func(name string) (interaction string)) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		name := r.URL.Query().Get("name")
+		fmt.Fprint(w, f(name))
+	}
 }

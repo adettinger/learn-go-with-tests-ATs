@@ -9,7 +9,7 @@ import (
 
 func main() {
 	log.Println("Starting HTTP server...")
-	handler := http.HandlerFunc(httpserver.Handler)
+	handler := httpserver.NewHandler()
 	log.Println("Server started on :8080")
 	if err := http.ListenAndServe(":8080", handler); err != nil {
 		log.Fatal(err)
