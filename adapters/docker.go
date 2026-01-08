@@ -16,7 +16,7 @@ import (
 func StartDockerServer(
 	t testing.TB,
 	port string,
-	dockerFilePath string,
+	binToBuild string,
 	imageName string,
 ) {
 	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Minute)
@@ -38,9 +38,13 @@ func StartDockerServer(
 	}
 	if imageName == "" {
 		req.FromDockerfile = testcontainers.FromDockerfile{
-			Context:    "../../.",
-			Dockerfile: dockerFilePath,
+			Context: "../../.",
+			Dockerfile: "Dockerfile",
 			// set to false if you want less spam, but this is helpful if you're having troubles
+			BuildArgs: map[string]*string{
+				"bin_to_build":   &binToBuild,
+				"port_to_expose": &port,
+			},
 			PrintBuildLog: true,
 		}
 	} else {
