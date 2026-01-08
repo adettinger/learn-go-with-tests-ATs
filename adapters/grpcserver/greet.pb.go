@@ -109,6 +109,94 @@ func (x *GreetReply) GetMessage() string {
 	return ""
 }
 
+type CurseRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Name          string                 `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *CurseRequest) Reset() {
+	*x = CurseRequest{}
+	mi := &file_greet_proto_msgTypes[2]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *CurseRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*CurseRequest) ProtoMessage() {}
+
+func (x *CurseRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_greet_proto_msgTypes[2]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use CurseRequest.ProtoReflect.Descriptor instead.
+func (*CurseRequest) Descriptor() ([]byte, []int) {
+	return file_greet_proto_rawDescGZIP(), []int{2}
+}
+
+func (x *CurseRequest) GetName() string {
+	if x != nil {
+		return x.Name
+	}
+	return ""
+}
+
+type CurseReply struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Message       string                 `protobuf:"bytes,1,opt,name=message,proto3" json:"message,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *CurseReply) Reset() {
+	*x = CurseReply{}
+	mi := &file_greet_proto_msgTypes[3]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *CurseReply) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*CurseReply) ProtoMessage() {}
+
+func (x *CurseReply) ProtoReflect() protoreflect.Message {
+	mi := &file_greet_proto_msgTypes[3]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use CurseReply.ProtoReflect.Descriptor instead.
+func (*CurseReply) Descriptor() ([]byte, []int) {
+	return file_greet_proto_rawDescGZIP(), []int{3}
+}
+
+func (x *CurseReply) GetMessage() string {
+	if x != nil {
+		return x.Message
+	}
+	return ""
+}
+
 var File_greet_proto protoreflect.FileDescriptor
 
 const file_greet_proto_rawDesc = "" +
@@ -119,9 +207,15 @@ const file_greet_proto_rawDesc = "" +
 	"\x04name\x18\x01 \x01(\tR\x04name\"&\n" +
 	"\n" +
 	"GreetReply\x12\x18\n" +
-	"\amessage\x18\x01 \x01(\tR\amessage2F\n" +
+	"\amessage\x18\x01 \x01(\tR\amessage\"\"\n" +
+	"\fCurseRequest\x12\x12\n" +
+	"\x04name\x18\x01 \x01(\tR\x04name\"&\n" +
+	"\n" +
+	"CurseReply\x12\x18\n" +
+	"\amessage\x18\x01 \x01(\tR\amessage2\x83\x01\n" +
 	"\aGreeter\x12;\n" +
-	"\x05Greet\x12\x18.grpcserver.GreetRequest\x1a\x16.grpcserver.GreetReply\"\x00B%Z#github.com/quii/adapters/grpcserverb\x06proto3"
+	"\x05Greet\x12\x18.grpcserver.GreetRequest\x1a\x16.grpcserver.GreetReply\"\x00\x12;\n" +
+	"\x05Curse\x12\x18.grpcserver.CurseRequest\x1a\x16.grpcserver.CurseReply\"\x00B%Z#github.com/quii/adapters/grpcserverb\x06proto3"
 
 var (
 	file_greet_proto_rawDescOnce sync.Once
@@ -135,16 +229,20 @@ func file_greet_proto_rawDescGZIP() []byte {
 	return file_greet_proto_rawDescData
 }
 
-var file_greet_proto_msgTypes = make([]protoimpl.MessageInfo, 2)
+var file_greet_proto_msgTypes = make([]protoimpl.MessageInfo, 4)
 var file_greet_proto_goTypes = []any{
 	(*GreetRequest)(nil), // 0: grpcserver.GreetRequest
 	(*GreetReply)(nil),   // 1: grpcserver.GreetReply
+	(*CurseRequest)(nil), // 2: grpcserver.CurseRequest
+	(*CurseReply)(nil),   // 3: grpcserver.CurseReply
 }
 var file_greet_proto_depIdxs = []int32{
 	0, // 0: grpcserver.Greeter.Greet:input_type -> grpcserver.GreetRequest
-	1, // 1: grpcserver.Greeter.Greet:output_type -> grpcserver.GreetReply
-	1, // [1:2] is the sub-list for method output_type
-	0, // [0:1] is the sub-list for method input_type
+	2, // 1: grpcserver.Greeter.Curse:input_type -> grpcserver.CurseRequest
+	1, // 2: grpcserver.Greeter.Greet:output_type -> grpcserver.GreetReply
+	3, // 3: grpcserver.Greeter.Curse:output_type -> grpcserver.CurseReply
+	2, // [2:4] is the sub-list for method output_type
+	0, // [0:2] is the sub-list for method input_type
 	0, // [0:0] is the sub-list for extension type_name
 	0, // [0:0] is the sub-list for extension extendee
 	0, // [0:0] is the sub-list for field type_name
@@ -161,7 +259,7 @@ func file_greet_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_greet_proto_rawDesc), len(file_greet_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   2,
+			NumMessages:   4,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

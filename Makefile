@@ -6,3 +6,10 @@ build-http-image:
 
 build-grpc-image:
 	docker build -t my-app:test-grpcserver -f ./cmd/grpcserver/Dockerfile .
+
+build:
+	golangci-lint run
+	go test ./...
+
+unit-tests:
+	go test -short ./...

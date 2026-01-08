@@ -7,9 +7,9 @@ import (
 	"github.com/adettinger/learn-go-with-tests-ATs/specifications"
 )
 
-func TestGreet(t *testing.T) {
-	specifications.GreetSpecification(
+func TestCurse(t *testing.T) {
+	specifications.CurseSpecification(
 		t,
-		specifications.GreetAdapter(interactions.Greet),
+		specifications.CurseAdapter(interactions.Curse),
 	)
 }

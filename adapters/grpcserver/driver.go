@@ -32,6 +32,22 @@ func (d *Driver) Greet(name string) (string, error) {
 	return greeting.Message, nil
 }
 
+func (d *Driver) Curse(name string) (string, error) {
+	client, err := d.getClient()
+	if err != nil {
+		return "", err
+	}
+
+	greeting, err := client.Curse(context.Background(), &CurseRequest{
+		Name: name,
+	})
+	if err != nil {
+		return "", err
+	}
+
+	return greeting.Message, nil
+}
+
 func (d *Driver) getClient() (GreeterClient, error) {
 	var err error
 	d.connectionOnce.Do(func() {
@@ -39,4 +55,10 @@ func (d *Driver) getClient() (GreeterClient, error) {
 		d.client = NewGreeterClient(d.conn)
 	})
 	return d.client, err
+}
+
+func (d *Driver) Close() {
+	if d.conn != nil {
+		d.conn.Close()
+	}
 }
