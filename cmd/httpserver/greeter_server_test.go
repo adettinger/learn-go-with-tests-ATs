@@ -45,7 +45,7 @@ func TestGreeterServer(t *testing.T) {
 		}}
 	)
 
-	adapters.StartDockerServer(t, port, dockerFilePath)
+	adapters.StartDockerServer(t, port, dockerFilePath, "my-app:test-httpserver")
 
 	t.Run("server greet specification", func(t *testing.T) {
 		specifications.GreetSpecification(t, driver)

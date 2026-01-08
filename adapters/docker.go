@@ -2,11 +2,13 @@ package adapters
 
 import (
 	"context"
+	"fmt"
 	"io"
 	"os"
 	"testing"
 	"time"
 
+	"github.com/docker/go-connections/nat"
 	"github.com/testcontainers/testcontainers-go"
 	"github.com/testcontainers/testcontainers-go/wait"
 )
@@ -15,6 +17,7 @@ func StartDockerServer(
 	t testing.TB,
 	port string,
 	dockerFilePath string,
+	imageName string,
 ) {
 	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Minute)
 	defer cancel()
@@ -26,18 +29,22 @@ func StartDockerServer(
 
 	t.Log("Starting container creation...")
 	req := testcontainers.ContainerRequest{
-		FromDockerfile: testcontainers.FromDockerfile{
-			Context:    "../../.",
-			Dockerfile: dockerFilePath,
-			// set to false if you want less spam, but this is helpful if you're having troubles
-			PrintBuildLog: true,
-		},
-		ExposedPorts: []string{"8080:8080"},
-		WaitingFor:   wait.ForHTTP("/").WithPort("8080"),
+		ExposedPorts: []string{fmt.Sprintf("%s:%s", port, port)},
+		WaitingFor:   wait.ForListeningPort(nat.Port(port)).WithStartupTimeout(5 * time.Second),
 		// options to keep the container running and capture logs
 		AlwaysPullImage: false,
 		SkipReaper:      true, // Prevents the container from being removed immediately on exit
 		AutoRemove:      false,
+	}
+	if imageName == "" {
+		req.FromDockerfile = testcontainers.FromDockerfile{
+			Context:    "../../.",
+			Dockerfile: dockerFilePath,
+			// set to false if you want less spam, but this is helpful if you're having troubles
+			PrintBuildLog: true,
+		}
+	} else {
+		req.Image = imageName
 	}
 
 	t.Log("Creating container...")
@@ -54,10 +61,15 @@ func StartDockerServer(
 	t.Log("Container created successfully")
 	t.Logf("Container ID: %s", container.GetContainerID())
 
+	cleanupCtx := context.Background()
 	t.Cleanup(func() {
 		t.Log("Terminating container...")
-		if err := container.Terminate(context.Background()); err != nil {
-			t.Fatalf("Warning: Failed to terminate container: %s", err)
+		terminateCtx, terminateCancel := context.WithTimeout(cleanupCtx, 10*time.Second)
+		defer terminateCancel()
+
+		if err := container.Terminate(terminateCtx); err != nil {
+			t.Logf("Warning: Failed to terminate container: %s", err)
+			// Continue anyway incase cleanup is still running
 		}
 	})
 }
